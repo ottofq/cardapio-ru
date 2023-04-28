@@ -3,15 +3,15 @@ import 'expo-router/entry';
 import { registerRootComponent } from 'expo';
 import { ExpoRoot } from 'expo-router';
 
-import AppProvider from '@/contexts/AppProvider';
+import BottomSheetContext from '@/contexts/BottomSheetContext';
 
 export function App() {
   //@ts-ignore
   const ctx = require.context('./src/app');
   return (
-    <AppProvider>
+    <BottomSheetContext>
       <ExpoRoot context={ctx} />
-    </AppProvider>
+    </BottomSheetContext>
   );
 }
 
