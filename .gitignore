@@ -11,7 +11,7 @@ npm-debug.*
 web-build/
 .idea
 .env
-
+.vscode
 # macOS
 .DS_Store
 
