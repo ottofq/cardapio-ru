@@ -1,6 +1,8 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text } from 'react-native';
 import { AirbnbRating } from 'react-native-ratings';
+
+import Box from '../../components/Box';
 
 type RatingItemPropsBase = {
   title: string;
@@ -38,10 +40,7 @@ export default function RatingItem({
   }
 
   return (
-    <View
-      style={styles.gap}
-      className="items-center rounded border border-gray-200 bg-tertiary p-3 shadow"
-    >
+    <Box style={styles.gap} className="items-center">
       <Text className="text-lg font-semibold">{title}</Text>
       <AirbnbRating
         reviews={reviews}
@@ -53,7 +52,7 @@ export default function RatingItem({
         size={readonly ? 24 : 34}
       />
       <Text className="text-sm">{reviewText}</Text>
-    </View>
+    </Box>
   );
 }
 

@@ -11,11 +11,12 @@ import { Pressable, StyleSheet, View } from 'react-native';
 import { Button, HelperText, Text, TextInput } from 'react-native-paper';
 
 import LoadingView from '@/components/Loading';
-import RatingItem from '@/components/RatingItem';
 import { useMenu, useRating } from '@/hooks/menu';
 import { useUpdateRating } from '@/hooks/rating';
 import type { RatingData } from '@/services/ratingService';
 import colors from '@/styles/colors';
+
+import RatingItem from './RatingItem';
 
 const DEFAULT_RATING = 3;
 
