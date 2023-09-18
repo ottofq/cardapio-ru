@@ -11,7 +11,7 @@ type BoxProps = Box & ViewProps;
 export default function Box({ children, className, ...rest }: BoxProps) {
   return (
     <View
-      className={`rounded border border-gray-200 bg-tertiary p-3 shadow ${className}`}
+      className={`rounded  border border-gray-200 bg-tertiary p-3 shadow ${className}`}
       {...rest}
     >
       {children}
