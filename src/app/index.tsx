@@ -1,5 +1,5 @@
-import Home from '../templates/Home';
+import LoginForm from './login';
 
-export default function HomePage() {
-  return <Home />;
+export default function LoginPage() {
+  return <LoginForm />;
 }
