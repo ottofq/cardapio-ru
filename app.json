@@ -6,6 +6,7 @@
     },
     "name": "cardapio-ru",
     "slug": "cardapio-ru",
+    "icon": "./src/assets/icon.png",
     "plugins": [
       [
         "expo-build-properties",
@@ -25,7 +26,12 @@
       "bundleIdentifier": "com.ottofq.cardapioru"
     },
     "android": {
-      "package": "com.ottofq.cardapioru"
+      "package": "com.ottofq.cardapioru",
+      "adaptiveIcon": {
+        "foregroundImage": "./src/assets/icon.png",
+        "backgroundColor": "#FFFFFF"
+      }
     }
+    
   }
 }
