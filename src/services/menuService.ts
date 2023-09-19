@@ -18,12 +18,30 @@ const ratingSchema = z.object({
   _id: z.string(),
   total_avaliacoes: z.number(),
   avaliacao: z.object({
-    entrada: z.number(),
-    prato_proteico: z.number(),
-    opcao: z.number(),
-    acompanhamento: z.number(),
-    guarnicao: z.number(),
-    sobremesa: z.number(),
+    entrada: z
+      .number()
+      .nullable()
+      .transform((value) => value ?? 0),
+    prato_proteico: z
+      .number()
+      .nullable()
+      .transform((value) => value ?? 0),
+    opcao: z
+      .number()
+      .nullable()
+      .transform((value) => value ?? 0),
+    acompanhamento: z
+      .number()
+      .nullable()
+      .transform((value) => value ?? 0),
+    guarnicao: z
+      .number()
+      .nullable()
+      .transform((value) => value ?? 0),
+    sobremesa: z
+      .number()
+      .nullable()
+      .transform((value) => value ?? 0),
   }),
 });
 
