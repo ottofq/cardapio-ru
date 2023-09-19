@@ -8,6 +8,8 @@ import { z } from 'zod';
 import { CheckboxItem } from '@/components/Checkbox';
 import { ControlledInput } from '@/components/Input';
 import { RadioButtonItem } from '@/components/RadioButton';
+import { useFormsActions } from '@/store/useForms/useForms';
+import { handleCheckboxStatus } from '@/utils/handleCheckboxStatus';
 
 const schema = z.object({
   avaliacao_RU: z.object({
@@ -40,14 +42,11 @@ export default function Form() {
 
   const router = useRouter();
 
-  const handleCheckboxStatus = (value: boolean) => {
-    if (value) return 'checked';
+  const { addAvaliacaoData } = useFormsActions();
 
-    return 'unchecked';
-  };
-
-  const onSubmit = (data) => {
-    console.log(data);
+  const onSubmit = (data: FormType) => {
+    addAvaliacaoData(data);
+    router.push('forms/submit');
   };
 
   return (
@@ -217,7 +216,7 @@ export default function Form() {
           mode="contained"
           onPress={handleSubmit(onSubmit)}
         >
-          PRÓXIMO
+          ENVIAR
         </Button>
       </View>
     </View>

@@ -7,6 +7,7 @@ import { z } from 'zod';
 
 import { ControlledInput } from '@/components/Input';
 import { RadioButtonItem } from '@/components/RadioButton';
+import { useFormsActions } from '@/store/useForms/useForms';
 
 const schema = z.object({
   nome: z.string({
@@ -16,6 +17,7 @@ const schema = z.object({
     .string({
       required_error: 'Digite seu email',
     })
+    .trim()
     .email('Digite um email válido'),
   password: z.string({
     required_error: 'Digite sua senha',
@@ -23,15 +25,20 @@ const schema = z.object({
   sexo: z.string({
     required_error: 'Selecione o sexo',
   }),
-  data_nascimento: z.string({
-    required_error: 'Digite a data de nascimento',
+  // data_nascimento: z.string({
+  //   required_error: 'Digite a data de nascimento',
+  // }),
+  matricula: z.string({
+    required_error: 'Digite sua matricula',
   }),
   curso: z.string({
     required_error: 'Digite seu curso',
   }),
-  ano_ingresso: z.string({
-    required_error: 'Digite seu ano de ingresso',
-  }),
+  ano_ingresso: z
+    .string({
+      required_error: 'Digite seu ano de ingresso',
+    })
+    .length(4, 'Digite o ano corretamente com 4 digitos. Ex: 2023'),
 });
 
 export type FormType = z.infer<typeof schema>;
@@ -47,9 +54,10 @@ export default function Form() {
   });
 
   const router = useRouter();
+  const { addStepData } = useFormsActions();
 
-  const onSubmit = (data) => {
-    console.log(data);
+  const onSubmit = (data: FormType) => {
+    addStepData(data);
     router.push('forms/step-2');
   };
 
@@ -68,6 +76,7 @@ export default function Form() {
           control={control}
           name="email"
           label="Email"
+          keyboardType="email-address"
         />
 
         <ControlledInput
@@ -79,12 +88,12 @@ export default function Form() {
           textContentType="password"
         />
 
-        <ControlledInput
+        {/* <ControlledInput
           mode="outlined"
           control={control}
           name="data_nascimento"
           label="Data de Nascimento"
-        />
+        /> */}
 
         <ControlledInput
           mode="outlined"
@@ -96,8 +105,17 @@ export default function Form() {
         <ControlledInput
           mode="outlined"
           control={control}
+          name="matricula"
+          label="Matricula"
+          keyboardType="number-pad"
+        />
+
+        <ControlledInput
+          mode="outlined"
+          control={control}
           name="ano_ingresso"
           label="Ano de ingresso"
+          keyboardType="number-pad"
         />
 
         <Controller

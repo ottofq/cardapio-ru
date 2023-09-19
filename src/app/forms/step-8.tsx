@@ -6,6 +6,8 @@ import { Button, HelperText, RadioButton, Text } from 'react-native-paper';
 import { z } from 'zod';
 
 import { RadioButtonItem } from '@/components/RadioButton';
+import { useFormsActions } from '@/store/useForms/useForms';
+import { strToBoolean } from '@/utils/strToBoolean';
 
 const schema = z.object({
   avaliacao_RU: z.object({
@@ -32,14 +34,11 @@ export default function Form() {
 
   const router = useRouter();
 
-  const handleCheckboxStatus = (value: boolean) => {
-    if (value) return 'checked';
+  const { addStepData, addAvaliacaoData } = useFormsActions();
 
-    return 'unchecked';
-  };
-
-  const onSubmit = (data) => {
-    console.log(data);
+  const onSubmit = (data: FormType) => {
+    const newData = strToBoolean(data);
+    addStepData(newData);
     router.push('forms/step-9');
   };
 

@@ -8,6 +8,8 @@ import { z } from 'zod';
 import { CheckboxItem } from '@/components/Checkbox';
 import { ControlledInput } from '@/components/Input';
 import { RadioButtonItem } from '@/components/RadioButton';
+import { useFormsActions } from '@/store/useForms/useForms';
+import { strToBoolean } from '@/utils/strToBoolean';
 
 const schema = z.object({
   peso_ideal: z.string({
@@ -43,9 +45,11 @@ export default function Form() {
 
     return 'unchecked';
   };
+  const { addStepData } = useFormsActions();
 
-  const onSubmit = (data) => {
-    console.log(data);
+  const onSubmit = (data: FormType) => {
+    const newData = strToBoolean(data);
+    addStepData(newData);
     router.push('forms/step-4');
   };
 

@@ -6,6 +6,7 @@ import { Button, HelperText, RadioButton, Text } from 'react-native-paper';
 import { z } from 'zod';
 
 import { RadioButtonItem } from '@/components/RadioButton';
+import { useFormsActions } from '@/store/useForms/useForms';
 
 const schema = z.object({
   bolsista: z.string({
@@ -35,9 +36,10 @@ export default function Form() {
   });
 
   const router = useRouter();
+  const { addStepData } = useFormsActions();
 
-  const onSubmit = (data) => {
-    console.log(data);
+  const onSubmit = (data: FormType) => {
+    addStepData(data);
     router.push('forms/step-3');
   };
 

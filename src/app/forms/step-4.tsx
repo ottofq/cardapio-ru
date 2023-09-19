@@ -6,6 +6,8 @@ import { Button, HelperText, RadioButton, Text } from 'react-native-paper';
 import { z } from 'zod';
 
 import { RadioButtonItem } from '@/components/RadioButton';
+import { useFormsActions } from '@/store/useForms/useForms';
+import { strToBoolean } from '@/utils/strToBoolean';
 
 const schema = z.object({
   adiciona_sal: z.string({
@@ -36,8 +38,11 @@ export default function Form() {
 
   const router = useRouter();
 
-  const onSubmit = (data) => {
-    console.log(data);
+  const { addStepData } = useFormsActions();
+
+  const onSubmit = (data: FormType) => {
+    const newData = strToBoolean(data);
+    addStepData(newData);
     router.push('forms/step-5');
   };
 

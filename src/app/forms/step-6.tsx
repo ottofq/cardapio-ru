@@ -7,15 +7,18 @@ import { z } from 'zod';
 
 import { CheckboxItem } from '@/components/Checkbox';
 import { ControlledInput } from '@/components/Input';
+import { useFormsActions } from '@/store/useForms/useForms';
+import { handleCheckboxStatus } from '@/utils/handleCheckboxStatus';
+import { strToBoolean } from '@/utils/strToBoolean';
 
 const schema = z.object({
   patologias_familia: z.object({
-    doenca_cardiovascular: z.boolean().default(false),
-    hipertensao_arterial: z.boolean().default(false),
-    obesidade: z.boolean().default(false),
-    dislipidemias: z.boolean().default(false),
-    diabetes: z.boolean().default(false),
-    doenca_arterial_coronariana: z.boolean().default(false),
+    fam_doenca_cardiovascular: z.boolean().default(false),
+    fam_hipertensao: z.boolean().default(false),
+    fam_obesidade: z.boolean().default(false),
+    fam_dislipidemias: z.boolean().default(false),
+    fam_diabetes: z.boolean().default(false),
+    fam_doenca_arterial_coronariana: z.boolean().default(false),
     patologias_familia_outras: z.string().optional().default(''),
   }),
   medicamento_continuo: z.string().optional().default(''),
@@ -35,14 +38,11 @@ export default function Form() {
 
   const router = useRouter();
 
-  const handleCheckboxStatus = (value: boolean) => {
-    if (value) return 'checked';
+  const { addStepData } = useFormsActions();
 
-    return 'unchecked';
-  };
-
-  const onSubmit = (data) => {
-    console.log(data);
+  const onSubmit = (data: FormType) => {
+    const newData = strToBoolean(data);
+    addStepData(newData);
     router.push('forms/step-7');
   };
 
@@ -60,11 +60,11 @@ export default function Form() {
               label="Doença cardiovascular"
               status={handleCheckboxStatus(value)}
               onPress={() =>
-                setValue('patologias_familia.doenca_cardiovascular', !value)
+                setValue('patologias_familia.fam_doenca_cardiovascular', !value)
               }
             />
           )}
-          name="patologias_familia.doenca_cardiovascular"
+          name="patologias_familia.fam_doenca_cardiovascular"
           control={control}
         />
 
@@ -74,11 +74,11 @@ export default function Form() {
               label="Hipertensão arterial"
               status={handleCheckboxStatus(value)}
               onPress={() =>
-                setValue('patologias_familia.hipertensao_arterial', !value)
+                setValue('patologias_familia.fam_hipertensao', !value)
               }
             />
           )}
-          name="patologias_familia.hipertensao_arterial"
+          name="patologias_familia.fam_hipertensao"
           control={control}
         />
 
@@ -87,10 +87,12 @@ export default function Form() {
             <CheckboxItem
               label="Obesidade"
               status={handleCheckboxStatus(value)}
-              onPress={() => setValue('patologias_familia.obesidade', !value)}
+              onPress={() =>
+                setValue('patologias_familia.fam_obesidade', !value)
+              }
             />
           )}
-          name="patologias_familia.obesidade"
+          name="patologias_familia.fam_obesidade"
           control={control}
         />
 
@@ -100,11 +102,11 @@ export default function Form() {
               label="Dislipidemias"
               status={handleCheckboxStatus(value)}
               onPress={() =>
-                setValue('patologias_familia.dislipidemias', !value)
+                setValue('patologias_familia.fam_dislipidemias', !value)
               }
             />
           )}
-          name="patologias_familia.dislipidemias"
+          name="patologias_familia.fam_dislipidemias"
           control={control}
         />
 
@@ -113,10 +115,12 @@ export default function Form() {
             <CheckboxItem
               label="Diabetes"
               status={handleCheckboxStatus(value)}
-              onPress={() => setValue('patologias_familia.diabetes', !value)}
+              onPress={() =>
+                setValue('patologias_familia.fam_diabetes', !value)
+              }
             />
           )}
-          name="patologias_familia.diabetes"
+          name="patologias_familia.fam_diabetes"
           control={control}
         />
 
@@ -127,13 +131,13 @@ export default function Form() {
               status={handleCheckboxStatus(value)}
               onPress={() =>
                 setValue(
-                  'patologias_familia.doenca_arterial_coronariana',
+                  'patologias_familia.fam_doenca_arterial_coronariana',
                   !value
                 )
               }
             />
           )}
-          name="patologias_familia.doenca_arterial_coronariana"
+          name="patologias_familia.fam_doenca_arterial_coronariana"
           control={control}
         />
 
@@ -150,8 +154,8 @@ export default function Form() {
         <ControlledInput
           mode="outlined"
           control={control}
-          name="patologias_familia.patologias_familia_outras"
-          label="Medicametos"
+          name="medicamento_continuo"
+          label="Medicamentos"
         />
       </ScrollView>
       <View className="mt-auto  flex-row justify-between">

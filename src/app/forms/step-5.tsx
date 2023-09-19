@@ -7,6 +7,9 @@ import { z } from 'zod';
 
 import { CheckboxItem } from '@/components/Checkbox';
 import { ControlledInput } from '@/components/Input';
+import { useFormsActions } from '@/store/useForms/useForms';
+import { handleCheckboxStatus } from '@/utils/handleCheckboxStatus';
+import { strToBoolean } from '@/utils/strToBoolean';
 
 const schema = z.object({
   patologias: z.object({
@@ -33,15 +36,11 @@ export default function Form() {
   });
 
   const router = useRouter();
+  const { addStepData } = useFormsActions();
 
-  const handleCheckboxStatus = (value: boolean) => {
-    if (value) return 'checked';
-
-    return 'unchecked';
-  };
-
-  const onSubmit = (data) => {
-    console.log(data);
+  const onSubmit = (data: FormType) => {
+    const newData = strToBoolean(data);
+    addStepData(newData);
     router.push('forms/step-6');
   };
 
