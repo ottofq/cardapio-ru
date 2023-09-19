@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Link, useRouter } from 'expo-router';
+import { Link, Redirect, useRouter } from 'expo-router';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { Image, View } from 'react-native';
@@ -15,6 +15,7 @@ const schema = z.object({
     .string({
       required_error: 'Email é obrigatório',
     })
+    .trim()
     .email('Digite um email válido'),
   password: z.string({
     required_error: 'A senha é obrigatória',
@@ -27,7 +28,7 @@ export type LoginFormProps = {
   //onSubmit?: SubmitHandler<FormType>;
 };
 
-const LoginForm = ({}: LoginFormProps) => {
+export default function LoginForm() {
   const { handleSubmit, control } = useForm<FormType>({
     resolver: zodResolver(schema),
   });
@@ -40,9 +41,9 @@ const LoginForm = ({}: LoginFormProps) => {
 
   const onDismissSnackBar = () => setVisible(false);
 
-  // if (token) {
-  //   return <Redirect href="(tabs)" />;
-  // }
+  if (token) {
+    return <Redirect href="(tabs)" />;
+  }
 
   const onSubmit = async ({
     email,
@@ -52,7 +53,7 @@ const LoginForm = ({}: LoginFormProps) => {
     password: string;
   }) => {
     try {
-      await singIn({ email, password });
+      await singIn({ email: email.trim(), password });
       router.push('(tabs)');
     } catch (e) {
       onToggleSnackBar();
@@ -69,6 +70,7 @@ const LoginForm = ({}: LoginFormProps) => {
           control={control}
           name="email"
           label="Email"
+          keyboardType="email-address"
         />
 
         <ControlledInput
@@ -106,6 +108,4 @@ const LoginForm = ({}: LoginFormProps) => {
       </Snackbar>
     </View>
   );
-};
-
-export default LoginForm;
+}
