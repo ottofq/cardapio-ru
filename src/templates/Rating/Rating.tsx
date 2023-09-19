@@ -3,6 +3,7 @@ import { ScrollView, StyleSheet, View } from 'react-native';
 import { Button, Text } from 'react-native-paper';
 
 import { useMenu, useRating } from '@/hooks/menu';
+import useAuth from '@/hooks/useAuth';
 
 import RatingItem from './RatingItem';
 import type { RatingModalMethods } from './RatingModal';
@@ -11,6 +12,7 @@ import RatingSkeleton from './Skeleton';
 
 export default function Rating() {
   const { data: menu } = useMenu();
+  const { token } = useAuth();
   const menuId = menu?.id ?? '';
 
   const { data: rating, isLoading, error } = useRating(menuId);
@@ -38,8 +40,18 @@ export default function Rating() {
   }
 
   return (
-    <ScrollView className="flex-1 bg-white p-4">
-      <View style={styles.gap} className="mb-10">
+    <ScrollView className="relative flex-1 bg-white ">
+      {!token ? (
+        <View className="absolute inset-0 z-20 h-full w-full items-center justify-center">
+          <View className="absolute inset-0 z-10 h-full w-full bg-black opacity-70" />
+          <View className="z-20 mx-4 items-center rounded bg-white px-4 py-10">
+            <Text className="text-sm font-bold">
+              CADASTRE-SE OU EFETUE O LOGIN PARA AVALIAR O CARDÁPIO
+            </Text>
+          </View>
+        </View>
+      ) : null}
+      <View style={styles.gap} className="mb-10 p-4">
         <Text className="text-center text-xl font-bold shadow-2xl">
           Total avaliações:{rating.total_avaliacoes}
         </Text>
