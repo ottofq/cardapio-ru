@@ -1,4 +1,5 @@
 import type { AxiosError } from 'axios';
+import { useRouter } from 'expo-router';
 import React from 'react';
 
 import { login } from '@/services/loginService';
@@ -23,22 +24,26 @@ const useAuth = () => {
   const [error, setError] = React.useState<string | null>(null);
   const [loading, setLoading] = React.useState(false);
 
-  //   useEffect(() => {
-  //     const storageToken = getTokenFromStorage();
+  const router = useRouter();
 
-  //     if (storageToken) setToken(storageToken);
-  //   }, []);
+  React.useEffect(() => {
+    const storageToken = getTokenFromStorage();
 
-  const removeTokenToStorage = () => {
+    if (storageToken) setToken(storageToken);
+  }, []);
+
+  const removeDataToStorage = () => {
     storage.removeItem('token');
+    storage.removeItem('id');
   };
 
   const getTokenFromStorage = (): string => {
     return storage.getItem('token');
   };
 
-  const setTokenToStorage = (token: string) => {
-    storage.setItem('token', token);
+  const setDataToStorage = (tkn: string, id: String) => {
+    storage.setItem('token', tkn);
+    storage.setItem('id', id);
   };
 
   const singIn = async ({
@@ -51,7 +56,10 @@ const useAuth = () => {
     try {
       setLoading(true);
       const response = await login({ email, password });
-      setToken(response.data.auth.token);
+      const tkn = response.data.auth.token;
+      const _id = response.data.student._id;
+      setToken(tkn);
+      setDataToStorage(tkn, _id);
       setLoading(false);
     } catch (e) {
       setLoading(false);
@@ -62,7 +70,8 @@ const useAuth = () => {
 
   const signOut = () => {
     setToken('');
-    removeTokenToStorage();
+    removeDataToStorage();
+    router.replace('/');
   };
 
   return {
