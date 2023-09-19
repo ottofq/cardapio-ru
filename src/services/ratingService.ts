@@ -1,5 +1,7 @@
 import { api } from '@/lib/axios';
 
+import storage from '../storage';
+
 export type RatingData = {
   entrada: number;
   prato_proteico: number;
@@ -11,8 +13,9 @@ export type RatingData = {
 };
 
 export async function ratingMenu(menuId: string, ratingData: RatingData) {
+  const id = storage.getItem('id');
   const { data } = await api.post(`/cardapio/avaliar/${menuId}`, {
-    student_id: '643f206b4ca93400538b5770',
+    student_id: id,
     avaliacao: {
       entrada: ratingData.entrada,
       prato_proteico: ratingData.prato_proteico,
