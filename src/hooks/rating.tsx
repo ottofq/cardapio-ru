@@ -1,4 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
+import { Alert } from 'react-native';
 
 import { queryClient } from '@/lib/react-query';
 import type { RatingData } from '@/services/ratingService';
@@ -16,5 +17,11 @@ export const useUpdateRating = ({ menuId, onSuccess }: useUpdateRatingProps) =>
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [QueryKeys.rating, menuId] });
       onSuccess();
+    },
+    onError: () => {
+      Alert.alert(
+        'Error',
+        'Não foi possivel enviar a avaliação, tente novamente!'
+      );
     },
   });
