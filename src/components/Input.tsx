@@ -39,6 +39,7 @@ export function ControlledInput<T extends FieldValues>(
         ref={field.ref}
         autoCapitalize="none"
         onChangeText={field.onChange}
+        onBlur={field.onBlur}
         value={field.value as string}
         {...inputProps}
       />
