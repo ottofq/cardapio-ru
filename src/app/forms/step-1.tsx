@@ -9,6 +9,14 @@ import { ControlledInput } from '@/components/Input';
 import { RadioButtonItem } from '@/components/RadioButton';
 import { useFormsActions } from '@/store/useForms/useForms';
 
+const isStringNumber = (value: unknown): value is string => {
+  if (typeof value !== 'string') {
+    return false;
+  }
+
+  return /^[0-9]+$/.test(value);
+};
+
 const schema = z.object({
   nome: z.string({
     required_error: 'Digite seu nome',
@@ -28,9 +36,14 @@ const schema = z.object({
   // data_nascimento: z.string({
   //   required_error: 'Digite a data de nascimento',
   // }),
-  matricula: z.string({
-    required_error: 'Digite sua matricula',
-  }),
+  matricula: z
+    .string({
+      required_error: 'Digite sua matricula',
+    })
+    .length(10, 'Digite os 10 números de sua matricula')
+    .refine((data) => isStringNumber(data), {
+      message: 'Digite somente números',
+    }),
   curso: z.string({
     required_error: 'Digite seu curso',
   }),
@@ -38,7 +51,10 @@ const schema = z.object({
     .string({
       required_error: 'Digite seu ano de ingresso',
     })
-    .length(4, 'Digite o ano corretamente com 4 digitos. Ex: 2023'),
+    .length(4, 'Digite o ano corretamente com 4 digitos. Ex: 2023')
+    .refine((data) => isStringNumber(data), {
+      message: 'Digite somente números',
+    }),
 });
 
 export type FormType = z.infer<typeof schema>;
@@ -107,7 +123,8 @@ export default function Form() {
           control={control}
           name="matricula"
           label="Matricula"
-          keyboardType="number-pad"
+          keyboardType="numeric"
+          maxLength={10}
         />
 
         <ControlledInput
@@ -116,6 +133,7 @@ export default function Form() {
           name="ano_ingresso"
           label="Ano de ingresso"
           keyboardType="number-pad"
+          maxLength={4}
         />
 
         <Controller
