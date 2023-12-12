@@ -2,6 +2,8 @@ import { StyleSheet } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { Text } from 'react-native-paper';
 
+import { Empty } from '@/components/Empty';
+import { Error } from '@/components/Error';
 import { useMenu } from '@/hooks/menu';
 import { formatDate } from '@/utils/dateFormat';
 
@@ -9,7 +11,7 @@ import MenuItem from './MenuItem';
 import HomeSkeleton from './Skeleton';
 
 export default function Home() {
-  const { data, isLoading, error } = useMenu();
+  const { data, isLoading, isError, refetch } = useMenu();
 
   function _formatDate(date: string) {
     const dateFormated = formatDate(date);
@@ -20,8 +22,18 @@ export default function Home() {
     return <HomeSkeleton />;
   }
 
+  if (isError) {
+    return (
+      <Error
+        title="Erro no carregamento"
+        description="Desculpe, ocorreu um problema ao carregar os dados. Tente novamente mais tarde."
+        onPress={refetch}
+      />
+    );
+  }
+
   if (!data) {
-    return <Text>Vazio</Text>;
+    return <Empty />;
   }
 
   return (

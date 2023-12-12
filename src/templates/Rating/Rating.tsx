@@ -2,6 +2,8 @@ import React from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { Button, Text } from 'react-native-paper';
 
+import { Empty } from '@/components/Empty';
+import { Error } from '@/components/Error';
 import { useMenu, useRating } from '@/hooks/menu';
 import useAuth from '@/hooks/useAuth';
 
@@ -11,11 +13,15 @@ import RatingModal from './RatingModal';
 import RatingSkeleton from './Skeleton';
 
 export default function Rating() {
-  const { data: menu } = useMenu();
+  const {
+    data: menu,
+    isError: isErrorMenu,
+    isLoading: isLoadingMenu,
+  } = useMenu();
   const { token } = useAuth();
   const menuId = menu?.id ?? '';
 
-  const { data: rating, isLoading, error } = useRating(menuId);
+  const { data: rating, isLoading, isError, refetch } = useRating(menuId);
 
   const ratingModaRef = React.useRef<RatingModalMethods>(null);
 
@@ -23,20 +29,26 @@ export default function Rating() {
     ratingModaRef.current?.showModal();
   }
 
-  if (isLoading) {
+  if (isLoading || isLoadingMenu) {
     return <RatingSkeleton />;
   }
 
-  if (error) {
-    return <Text>error</Text>;
+  if (isError || isErrorMenu) {
+    return (
+      <Error
+        title="Erro no carregamento"
+        description="Desculpe, ocorreu um problema ao carregar os dados. Tente novamente mais tarde."
+        onPress={refetch}
+      />
+    );
   }
 
   if (!rating) {
-    return <Text>Vazio</Text>;
+    return <Empty />;
   }
 
   if (!menu) {
-    return <Text>Vazio</Text>;
+    return <Empty />;
   }
 
   return (

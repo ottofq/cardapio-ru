@@ -3,6 +3,8 @@ import { Pressable, StyleSheet, Text } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 
 import Box from '@/components/Box';
+import { Empty } from '@/components/Empty';
+import { Error } from '@/components/Error';
 import { useListNews } from '@/hooks/news';
 import type { NewsItemData } from '@/services/newsServices';
 import { formatDate } from '@/utils/dateFormat';
@@ -11,7 +13,8 @@ import NewsDetailsModal from './NewsDetailsModal';
 import NewsSkeleton from './Skeleton';
 
 export default function News() {
-  const { data, error, isLoading, fetchNextPage, hasNextPage } = useListNews();
+  const { data, isError, isLoading, fetchNextPage, hasNextPage, refetch } =
+    useListNews();
   const [newsId, setNewsId] = React.useState('');
 
   const modalRef = React.useRef();
@@ -20,12 +23,18 @@ export default function News() {
     return <NewsSkeleton />;
   }
 
-  if (error) {
-    return <Text>error</Text>;
+  if (isError) {
+    return (
+      <Error
+        title="Erro no carregamento"
+        description="Desculpe, ocorreu um problema ao carregar os dados. Tente novamente mais tarde."
+        onPress={refetch}
+      />
+    );
   }
 
   if (!data) {
-    return <Text>Vazio</Text>;
+    return <Empty />;
   }
 
   function loadMore() {

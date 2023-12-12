@@ -10,6 +10,8 @@ import { Pressable, StyleSheet, useWindowDimensions, View } from 'react-native';
 import { Text } from 'react-native-paper';
 import RenderHTML from 'react-native-render-html';
 
+import { Empty } from '@/components/Empty';
+import { Error } from '@/components/Error';
 import LoadingView from '@/components/Loading';
 import { useNewsDetails } from '@/hooks/news';
 import colors from '@/styles/colors';
@@ -26,7 +28,7 @@ const NewsDetailsModal = React.forwardRef(function NewsDetailsModal(
   { id = '0' }: NewsDetailsModalProps,
   ref
 ) {
-  const { data: news, isLoading, error } = useNewsDetails(id);
+  const { data: news, isLoading, error, refetch } = useNewsDetails(id);
 
   const { width } = useWindowDimensions();
 
@@ -67,11 +69,17 @@ const NewsDetailsModal = React.forwardRef(function NewsDetailsModal(
     }
 
     if (error) {
-      return <Text>error</Text>;
+      return (
+        <Error
+          title="Erro no carregamento"
+          description="Desculpe, ocorreu um problema ao carregar os dados. Tente novamente mais tarde."
+          onPress={refetch}
+        />
+      );
     }
 
     if (!news) {
-      return <Text>Vazio</Text>;
+      return <Empty />;
     }
 
     return (
